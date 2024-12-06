@@ -33,3 +33,6 @@
 	path = addins/berkeley-testfloat-3
 	url = https://github.com/ucb-bar/berkeley-testfloat-3
 	ignore = untracked
+[submodule "tests/entropy/SP800-90B_EntropyAssessment"]
+	path = tests/entropy/SP800-90B_EntropyAssessment
+	url = https://github.com/usnistgov/SP800-90B_EntropyAssessment
