@@ -38,46 +38,46 @@ module stimulus;
    parameter MAXVECTORS = 8388610;
 
    logic                          clk;
-   logic               rst;
+   logic                          rst;
 
-   logic               Xs, Ys, Zs;             // input's signs
-   logic [P.NE-1:0]           Xe, Ye, Ze;             // input's biased exponents in B(NE.0) format
-   logic [P.NF:0]           Xm, Ym, Zm;             // input's significands in U(0.NF) format
-   logic               XZero, YZero, ZZero;    // is the input zero
-   logic [2:0]               OpCtrl;                 // operation control
-   logic               ASticky;                // sticky bit that is calculated during alignment
-   logic [P.FMALEN-1:0]       Sm;                     // the positive sum's significand
-   logic               InvA;                   // Was A inverted for effective subtraction (P-A or -P+A)
-   logic               As;                     // the aligned addend's sign (modified Z sign for other operations)
-   logic               Ps;                     // the product's sign
-   logic               Ss;                     // the sum's sign
-   logic [P.NE+1:0]           Se;                     // the sum's exponent
-   logic [$clog2(P.FMALEN+1)-1:0] SCnt;                   // normalization shift count
+   logic                          Xs, Ys, Zs;                   // input's signs
+   logic [P.NE-1:0]               Xe, Ye, Ze;                   // input's biased exponents in B(NE.0) format
+   logic [P.NF:0]                 Xm, Ym, Zm;                   // input's significands in U(0.NF) format
+   logic                          XZero, YZero, ZZero;          // is the input zero
+   logic [2:0]                    OpCtrl;                       // operation control
+   logic                          ASticky;                      // sticky bit that is calculated during alignment
+   logic [P.FMALEN-1:0]           Sm;                           // the positive sum's significand
+   logic                          InvA;                         // Was A inverted for effective subtraction (P-A or -P+A)
+   logic                          As;                           // the aligned addend's sign (modified Z sign for other operations)
+   logic                          Ps;                           // the product's sign
+   logic                          Ss;                           // the sum's sign
+   logic [P.NE+1:0]               Se;                           // the sum's exponent
+   logic [$clog2(P.FMALEN+1)-1:0] SCnt;                         // normalization shift count
 
-   logic [31:0]           errors;
-   logic [31:0]           vectornum;
+   logic [31:0]                   errors;
+   logic [31:0]                   vectornum;
 
-   integer               i;
-   integer               j;
-   integer               y_integer;
-   logic [263:0]           testvectors1 [];
-   logic [63:0]           X, Y, Z, Res;
-   logic [4:0]               Flg;
+   integer                        i;
+   integer                        j;
+   integer                        y_integer;
+   logic [263:0]                  testvectors1 [];
+   logic [63:0]                   X, Y, Z, Res;
+   logic [4:0]                    Flg;
 
-   integer               num_vectors = 0;
+   integer                        num_vectors = 0;
    parameter string               VEC_FILE;
 
-   logic [2:0]               Frm;
-   logic [1:0]               Fmt;
-   logic [1:0]               PostProcSel;
-   logic [P.CVTLEN-1:0]       CvtLzcIn;
-   logic [P.FLEN-1:0]           PostProcRes;
-   logic [4:0]               PostProcFlg;
-   logic [P.XLEN-1:0]           FCvtIntRes;
-   logic [P.NE+1:0]           DivUe;
-   logic [P.DIVb:0]           DivUm;
-   logic [P.NE:0]           CvtCe;
-   logic [P.LOGCVTLEN-1:0]       CvtShiftAmt;
+   logic [2:0]                    Frm;
+   logic [1:0]                    Fmt;
+   logic [1:0]                    PostProcSel;
+   logic [P.CVTLEN-1:0]           CvtLzcIn;
+   logic [P.FLEN-1:0]             PostProcRes;
+   logic [4:0]                    PostProcFlg;
+   logic [P.XLEN-1:0]             FCvtIntRes;
+   logic [P.NE+1:0]               DivUe;
+   logic [P.DIVb:0]               DivUm;
+   logic [P.NE:0]                 CvtCe;
+   logic [P.LOGCVTLEN-1:0]        CvtShiftAmt;
 
    logic Zero;
    logic XSubnorm;
@@ -92,19 +92,19 @@ module stimulus;
    logic XInf;
    logic YInf;
    logic ZInf;
-   logic [P.FLEN-1:0]           XPostBox;                       // X after being properly NaN-boxed
-   logic [P.NE-2:0]           Bias;                           // Exponent bias
-   logic [P.LOGFLEN-1:0]       Nf;                             // Number of fractional bits
+   logic [P.FLEN-1:0]             XPostBox;                     // X after being properly NaN-boxed
+   logic [P.NE-2:0]               Bias;                         // Exponent bias
+   logic [P.LOGFLEN-1:0]          Nf;                           // Number of fractional bits
 
-   integer               fd;
-   integer               handle3;
-   string               line;
+   integer                        fd;
+   integer                        handle3;
+   string                         line;
 
-   logic [31:0]           VectorNum=0;                    // index for test vector
-   logic [31:0]           FrmNum=0;                       // index for rounding mode
-   logic [31:0]           OpCtrlNum=0;                    // index for OpCtrl
-   logic [P.Q_LEN*4+7:0]       TestVectors[MAXVECTORS-1:0];    // list of test vectors
-   logic               vectors_ready;
+   logic [31:0]                   VectorNum=0;                  // index for test vector
+   logic [31:0]                   FrmNum=0;                     // index for rounding mode
+   logic [31:0]                   OpCtrlNum=0;                  // index for OpCtrl
+   logic [P.Q_LEN*4+7:0]          TestVectors[MAXVECTORS-1:0];  // list of test vectors
+   logic                          vectors_ready;
 
    unpack #(P) unpack (.X(X), .Y(Y), .Z(Z), .Fmt(Fmt), .XEn(1'b1),
                        .YEn(1'b1), .ZEn(1'b1), .FPUActive(1'b1), .Xs(Xs), .Ys(Ys), .Zs(Zs),

@@ -48,7 +48,7 @@ view wave
 
 -- display input and output signals as hexidecimal values
 # Diplays All Signals recursively
-#add wave -hex -r /stimulus/*
+# add wave -hex -r /stimulus/*
 
 #Inputs
 add wave -noupdate -divider -height 32 "Inputs"
@@ -74,7 +74,7 @@ add wave -hex -r /stimulus/dut/*
 add wave -noupdate -divider -height 32 "postprocess"
 add wave -hex -r /stimulus/postprocess/*
 
-#Output
+# Output
 add wave -noupdate -divider -height 32 "Outputs"
 add wave -hex /stimulus/ASticky
 add wave -hex /stimulus/Sm
@@ -85,14 +85,13 @@ add wave -hex /stimulus/Ss
 add wave -hex /stimulus/Se
 add wave -hex /stimulus/SCnt
 
-#PostProc
+# PostProc
 add wave -noupdate -divider -height 32 "PostProc"
 add wave -hex /stimulus/postprocess/*
 
 # Shift Correction
 add wave -noupdate -divider -height 32 "PostProc"
 add wave -hex /stimulus/postprocess/shiftcorrection/*
-
 
 # add list -hex -r /tb/*
 # add log -r /*
