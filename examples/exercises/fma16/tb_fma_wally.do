@@ -40,7 +40,8 @@ vlog $WALLY/src/generic/lzc.sv $WALLY/src/generic/mux.sv
 vlog $WALLY/src/fpu/postproc/*.sv
 vlog $WALLY/src/fpu/unpack.sv $WALLY/src/fpu/unpackinput.sv $WALLY/src/fpu/fmtparams.sv
 
-# start and run simulation
+# Start and run simulation (change to vector you wish to test)
+# Remember to set the rounding mode and format in the tb too
 vsim -voptargs=+acc -gVEC_FILE=$VECROOT/f16_mulAdd_rne.tv work.stimulus
 
 view list
@@ -50,7 +51,7 @@ view wave
 # Diplays All Signals recursively
 # add wave -hex -r /stimulus/*
 
-#Inputs
+# Inputs
 add wave -noupdate -divider -height 32 "Inputs"
 add wave -hex /stimulus/Xs
 add wave -hex /stimulus/Ys

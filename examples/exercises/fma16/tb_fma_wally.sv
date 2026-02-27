@@ -135,7 +135,7 @@ module stimulus;
    // Define the output file
    initial
      begin
-    handle3 = $fopen("fma16.out");
+       handle3 = $fopen("fma16.out");
      end
 
    // ---------- Pass 1 (count) + Pass 2 (readmemh) ----------
@@ -187,39 +187,33 @@ module stimulus;
       #0  Frm         = 3'b000;
 
       if (num_vectors == 0) begin
-     $display("ERROR: No valid vectors found.");
-     $finish;
+        $display("ERROR: No valid vectors found.");
+        $finish;
       end
 
       for (int i = 0; i < num_vectors; i++) begin
-     // take the ith packed vector
-     #40 X   = {{P.Q_LEN-P.H_LEN{1'b1}}, TestVectors[i][8+4*(P.H_LEN)-1 : 8+3*(P.H_LEN)]};
-     #0  Y   = {{P.Q_LEN-P.H_LEN{1'b1}}, TestVectors[i][8+3*(P.H_LEN)-1 : 8+2*(P.H_LEN)]};
-     #0  Z   = {{P.Q_LEN-P.H_LEN{1'b1}}, TestVectors[i][8+2*(P.H_LEN)-1 : 8+P.H_LEN]};
-     #0  Res = {{P.Q_LEN-P.H_LEN{1'b1}}, TestVectors[i][8+(P.H_LEN-1)   : 8]};
-     #0  Flg = TestVectors[i][4:0];
+        // take the ith packed vector
+        #40 X   = {{P.Q_LEN-P.H_LEN{1'b1}}, TestVectors[i][8+4*(P.H_LEN)-1 : 8+3*(P.H_LEN)]};
+        #0  Y   = {{P.Q_LEN-P.H_LEN{1'b1}}, TestVectors[i][8+3*(P.H_LEN)-1 : 8+2*(P.H_LEN)]};
+        #0  Z   = {{P.Q_LEN-P.H_LEN{1'b1}}, TestVectors[i][8+2*(P.H_LEN)-1 : 8+P.H_LEN]};
+        #0  Res = {{P.Q_LEN-P.H_LEN{1'b1}}, TestVectors[i][8+(P.H_LEN-1)   : 8]};
+        #0  Flg = TestVectors[i][4:0];
+        #40 if ((PostProcRes != Res) || (PostProcFlg != Flg)) begin
+          errors += 1;
+          $fdisplay(handle3, "FAIL: got=%h expected=%h | flags=%b exp_flags=%b",
+                    PostProcRes, Res, PostProcFlg, Flg);
+          end else begin
+            $fdisplay(handle3, "PASS: Sim Result: %h_%b || TV Result: %h_%b || #Errors: %0d",
+                     PostProcRes, PostProcFlg, Res, Flg, errors);
+        end
 
-     #40 if ((PostProcRes != Res) || (PostProcFlg != Flg)) begin
-        errors += 1;
-            $fdisplay(handle3, "FAIL: got=%h expected=%h | flags=%b exp_flags=%b",
-                      PostProcRes, Res, PostProcFlg, Flg);
-     end else begin
-        $fdisplay(handle3, "PASS: Sim Result: %h_%b || TV Result: %h_%b || #Errors: %0d",
-               PostProcRes, PostProcFlg, Res, Flg, errors);
-     end
-
-     $fdisplay(handle3, "X=%h Y=%h Z=%h | Res=%h Flg=%b",
-           X, Y, Z, Res, Flg);
-
-     $fdisplay(handle3, "Xs=%b Ys=%b Zs=%b | Xe=%h Ye=%h Ze=%h | Xm=%h Ym=%h Zm=%h",
-           Xs, Ys, Zs, Xe, Ye, Ze, Xm, Ym, Zm);
-
-     $fdisplay(handle3, "XZero=%b YZero=%b ZZero=%b OpCtrl=%b ASticky=%b | Sm=%h | InvA=%h As=%h Ps=%h Ss=%h | Se=%h SCnt=%h",
-           XZero, YZero, ZZero, OpCtrl, ASticky, Sm, InvA, As, Ps, Ss, Se, SCnt);
-
-     $fdisplay(handle3, "-----");
-
-
+        $fdisplay(handle3, "X=%h Y=%h Z=%h | Res=%h Flg=%b",
+                  X, Y, Z, Res, Flg);
+        $fdisplay(handle3, "Xs=%b Ys=%b Zs=%b | Xe=%h Ye=%h Ze=%h | Xm=%h Ym=%h Zm=%h",
+                  Xs, Ys, Zs, Xe, Ye, Ze, Xm, Ym, Zm);
+        $fdisplay(handle3, "XZero=%b YZero=%b ZZero=%b OpCtrl=%b ASticky=%b | Sm=%h | InvA=%h As=%h Ps=%h Ss=%h | Se=%h SCnt=%h",
+                  XZero, YZero, ZZero, OpCtrl, ASticky, Sm, InvA, As, Ps, Ss, Se, SCnt);
+        $fdisplay(handle3, "-----");
       end
 
       $display("Number of vectors = %0d", num_vectors);
