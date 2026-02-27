@@ -1,5 +1,5 @@
 ///////////////////////////////////////////
-// tb_fma.sv
+// tb_fma_wally.sv
 //
 // Written:  james.stine@okstate.edu, qkoenin@okstate.edu
 // Modified:
